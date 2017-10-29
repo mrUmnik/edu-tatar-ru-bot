@@ -1,0 +1,13 @@
+{
+  "name": "mrUmnik/edu-tatar-ru-bot",
+  "description": "Telegram bot for edu.tatar.ru",
+  "authors": [
+    {
+      "name": "mr.Umnik",
+      "email": "mr.umnik@gmail.com"
+    }
+  ],
+  "require": {
+    "longman/telegram-bot": "dev-master"
+  }
+}
