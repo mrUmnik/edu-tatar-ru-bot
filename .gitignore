@@ -7,3 +7,6 @@ composer.lock
 
 # logs
 logs/
+
+#temporary files
+tmp/

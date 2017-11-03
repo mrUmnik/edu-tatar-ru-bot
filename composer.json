@@ -8,6 +8,7 @@
     }
   ],
   "require": {
+    "ext-curl": "*",
     "longman/telegram-bot": "dev-master"
   }
 }
