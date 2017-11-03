@@ -1,0 +1,13 @@
+{
+  "database": {
+    "host": "localhost",
+    "name": "database name",
+    "login": "database login",
+    "password": "database password"
+  },
+  "bot": {
+    "name": "Telegram bot name",
+    "token": "Telegram bot token",
+    "botan_token": "If you want to use botan.io, set the token here"
+  }
+}

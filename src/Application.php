@@ -2,17 +2,32 @@
 namespace EduTatarRuBot;
 
 
-use EduTatarRuBot\Tasks\TaskInterface;
+use EduTatarRuBot\Tasks\Task;
 
 class Application
 {
-	public function __construct()
-	{
+	protected $db;
+	protected $config;
 
+	public function __construct(Config $config)
+	{
+		$this->config = $config;
+		$this->db = new Database(
+			$this->getConfig('database:host'),
+			$this->getConfig('database:name'),
+			$this->getConfig('database:login'),
+			$this->getConfig('database:password')
+		);
 	}
 
-	public function run(TaskInterface $task)
+	public function getConfig($param)
 	{
+		return $this->config->get($param);
+	}
+
+	public function run(Task $task)
+	{
+		$task->setApplication($this);
 		$task->run();
 	}
 }

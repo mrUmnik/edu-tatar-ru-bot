@@ -1,6 +1,7 @@
 <?php
 namespace EduTatarRuBot\Tasks;
-class CheckHomework implements TaskInterface
+
+class CheckHomework extends Task
 {
 	public function run()
 	{

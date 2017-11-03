@@ -1,6 +1,6 @@
 <?php
 namespace EduTatarRuBot\Tasks;
-class ProcessWebhookTask implements TaskInterface
+class ProcessWebhookTask extends Task
 {
 	public function run()
 	{

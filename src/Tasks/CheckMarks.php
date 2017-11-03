@@ -1,6 +1,6 @@
 <?php
 namespace EduTatarRuBot\Tasks;
-class CheckMarks implements TaskInterface
+class CheckMarks extends Task
 {
 	public function run()
 	{
