@@ -8,6 +8,7 @@
   "bot": {
     "name": "Telegram bot name",
     "token": "Telegram bot token",
+    "admin_id": "Telegram admin id",
     "botan_token": "If you want to use botan.io, set the token here"
   }
 }

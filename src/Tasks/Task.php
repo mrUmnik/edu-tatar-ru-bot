@@ -5,6 +5,9 @@ use EduTatarRuBot\Application;
 
 abstract class Task
 {
+	/**
+	 * @var Application $app
+	 */
 	protected $app;
 
 	public function setApplication(Application $app)
