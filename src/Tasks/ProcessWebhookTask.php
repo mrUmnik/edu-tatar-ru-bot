@@ -1,9 +1,11 @@
 <?php
 namespace EduTatarRuBot\Tasks;
+use EduTatarRuBot\Application;
+
 class ProcessWebhookTask extends Task
 {
 	public function run()
 	{
-		$this->getApplication()->getTelegramBot()->handle();
+		Application::getInstance()->getTelegramBot()->handle();
 	}
 }

@@ -6,11 +6,12 @@ use EduTatarRuBot\Tasks\Task;
 
 class Application
 {
+	protected static $instance;
 	protected $db;
 	protected $config;
 	protected $telegramBot;
 
-	public function __construct(Config $config)
+	protected function __construct(Config $config)
 	{
 		$this->config = $config;
 		$this->db = new Database(
@@ -36,13 +37,26 @@ class Application
 		return $this->config->get($param);
 	}
 
-	public function getTelegramBot()
-	{
-		return $this->telegramBot;
+    public static function getInstance()
+    {
+         if (null==self::$instance) {
+             self::$instance = new self(new Config());
+         }
+         return self::$instance;
 	}
+
+    public function getTelegramBot()
+    {
+        return $this->telegramBot;
+    }
+
+    public function getDB()
+    {
+        return $this->db;
+    }
+
 	public function run(Task $task)
 	{
-		$task->setApplication($this);
 		$task->run();
 	}
 }
