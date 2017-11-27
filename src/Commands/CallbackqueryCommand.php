@@ -62,9 +62,11 @@ class CallbackqueryCommand extends SystemCommand
 		if ($callback_data == 'showTomorrowHomework') {
 			$client = new Client();
 			$client->loadByChatId($callback_query->getMessage()->getChat()->getId());
-			if ($client->getValue('STATE') == 'ACTIVE') {
+			if ($client->checkActivity()) {
 				$homework = new Homework();
 				$homework->sendExistedForDay($client, Date::getNearestWorkDay());
+			} else {
+				return Request::emptyResponse();
 			}
 		}
 

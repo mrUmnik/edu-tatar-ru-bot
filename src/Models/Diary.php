@@ -61,4 +61,32 @@ class Diary extends Model
 		}
 		return $result;
 	}
+
+
+	public function getMarks()
+	{
+		$result = [];
+		if (!$this->isLoaded()) {
+			throw new EduTatarRuBotException('Dairy is not loaded');
+		}
+		$diaryXml = simplexml_load_string($this->getValue('CONTENT'));
+		if (!$diaryXml) {
+			throw new EduTatarRuBotException('Diary content is not a valid xml');
+		}
+		foreach ($diaryXml->page as $monthXml) {
+			foreach ($monthXml as $dayXml) {
+				$index = 0;
+				foreach ($dayXml->classes->class as $class) {
+					$class = trim((string)$class);
+					$mark = $dayXml->marks->marks[$index];
+					if (mb_strlen($class) && mb_strlen($mark)) {
+						$result[$class][] = $mark;
+					}
+					$index++;
+				}
+
+			}
+		}
+		return $result;
+	}
 }

@@ -13,6 +13,7 @@ namespace Longman\TelegramBot\Commands\SystemCommands;
 use EduTatarRuBot\Models\Client;
 use Longman\TelegramBot\Commands\SystemCommand;
 use Longman\TelegramBot\Conversation;
+use Longman\TelegramBot\Entities\KeyboardButton;
 use Longman\TelegramBot\Request;
 
 /**
@@ -72,11 +73,25 @@ class GenericmessageCommand extends SystemCommand
 		if ($conversation->exists() && ($command = $conversation->getCommand())) {
 			return $this->telegram->executeCommand($command);
 		}
-
 		$message = $this->getMessage();
+		$text = $message->getText(true);
 		$chat_id = $message->getChat()->getId();
+
+		$keyboard = \EduTatarRuBot\Models\MessageQueue::getKeyboardButtons();
+		foreach ($keyboard as $buttonRow) {
+			foreach ($buttonRow as $buttonCode => $buttonText) {
+				/**
+				 * @var $button KeyboardButton
+				 */
+				if ($buttonText == $text) {
+					return $this->telegram->executeCommand($buttonCode);
+				}
+			}
+		}
+
+
 		$client = new Client();
-		$client->addClientProcess($chat_id, $message->getText(true));
+		$client->addClientProcess($chat_id, $text);
 
 		return Request::emptyResponse();
 

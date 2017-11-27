@@ -19,7 +19,7 @@ class Mark extends Model
 			return;
 		}
 		$clientCreatedDate = new \DateTime($client->getValue('CREATED_DATE'));
-		if ($clientCreatedDate - 60 * 60 * 24 > $date->getTimestamp()) {
+		if ($clientCreatedDate->getTimestamp() - 60 * 60 * 24 > $date->getTimestamp()) {
 			return;// mark was received before start notifications
 		}
 		$isToday = ($date->format('d.m.Y') == date('d.m.Y'));
@@ -33,18 +33,24 @@ class Mark extends Model
 		}
 		foreach ($newMarks as $lesson => $mark) {
 			if ($oldMarks[$lesson] != $mark) {
-				$icons = array(
-					'1' => '🍄',
-					'2' => '🍄',
-					'3' => '🐒',
-					'4' => '🐭',
-					'5' => '🦊',
-				);
-				$icon = $icons[$mark] ? $icons[$mark] : '🦀';
-				if (mb_strlen($oldMarks[$lesson])) {
-					$text .= $icon . " Изменилась оценка по предмету " . $lesson . ($isToday ? "" : " за " . $date->format('d.m.Y')) . ". Было " . $oldMarks[$lesson] . ", стало " . $mark . "\r\n";
+				if (mb_strtolower($mark) == 'н') {
+					$text .= '🍻 ' . $client->getValue('NAME') . ' ' .
+						($client->getValue('GENDER') == 'F' ? 'прогуляла' : 'прогулял') .
+						" предмет *" . $lesson . "*" . ($isToday ? "" : $date->format('d.m.Y')) . "\r\n";
 				} else {
-					$text .= $icon . " Получена оценка *" . $mark . "* по предмету " . $lesson . ($isToday ? "" : " за " . $date->format('d.m.Y')) . "\r\n";
+					$icons = array(
+						'1' => '🍄',
+						'2' => '🍄',
+						'3' => '🐒',
+						'4' => '🐭',
+						'5' => '🦊',
+					);
+					$icon = $icons[$mark] ? $icons[$mark] : '🦀';
+					if (mb_strlen($oldMarks[$lesson])) {
+						$text .= $icon . " Изменилась оценка по предмету " . $lesson . ($isToday ? "" : " за " . $date->format('d.m.Y')) . ". Было " . $oldMarks[$lesson] . ", стало " . $mark . "\r\n";
+					} else {
+						$text .= $icon . " Получена оценка *" . $mark . "* по предмету " . $lesson . ($isToday ? "" : " за " . $date->format('d.m.Y')) . "\r\n";
+					}
 				}
 			}
 		}
