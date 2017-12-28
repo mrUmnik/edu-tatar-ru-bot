@@ -87,13 +87,13 @@ class Client extends Model
                 }
                 break;
             case "ACTIVE":
-                $text = 'Не волнуйтесь, всё идёт по плану. Мы уже следим за всем чем нужно.';
-                break;
+	            return false;
         }
 
         if ($text) {
             $this->sendMessage($text, $type);
         }
+	    return true;
     }
 
     public function loadByChatId($chatId)

@@ -73,16 +73,20 @@ class TomorrowCommand extends SystemCommand
 					$text = '👀' . " *Расписание  на " . $diaryDay->getDate()->format('d.m.Y') . "*\r\n";
 					$index = 0;
 					foreach ($lessons as $lesson) {
-						$text .= ++$index . '. _' . $lesson . '_: ' . $homework[$lesson] . "\r\n";
+						$lessonHomework = $homework[$lesson];
+						if (!mb_strlen($lessonHomework)) {
+							$lessonHomework = '_не задано_';
+						}
+						$text .= ++$index . '. _' . $lesson . '_: ' . $lessonHomework . "\r\n";
 					}
-					$data = [
-						'chat_id' => $chatId,
-						'text' => $text,
-						'parse_mode' => 'markdown',
-					];
-
-					return Request::sendMessage($data);
 				}
+				$data = [
+					'chat_id' => $chatId,
+					'text' => $text,
+					'parse_mode' => 'markdown',
+				];
+
+				return \EduTatarRuBot\Request::sendMessage($data);
 			}
 		}
 
