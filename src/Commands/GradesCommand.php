@@ -78,7 +78,7 @@ class GradesCommand extends SystemCommand
 					'parse_mode' => 'markdown',
 				];
 
-				return Request::sendMessage($data);
+				return \EduTatarRuBot\Request::sendMessage($data);
 			}
 		}
 

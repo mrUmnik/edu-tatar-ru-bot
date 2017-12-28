@@ -34,6 +34,7 @@ class MessageQueue extends Model
             'chat_id' => $chatId,
             'text' => $message,
         ];
+	    $params['reply_markup'] = self::getKeyboard(); // keyboard is always shown
         switch ($type) {
             case "CHANGED_HOMEWORK":
                 $inline_keyboard = new InlineKeyboard([
@@ -49,12 +50,15 @@ class MessageQueue extends Model
             case "EXISTED_HOMEWORK":
             case "HOMEWORK":
             case "MARK":
+	            $params['parse_mode'] = 'Markdown';
+	            break;
             case "AUTHORIZATION":
                 $params['parse_mode'] = 'Markdown';
-                break;
+	            unset($params['reply_markup']);
+	            break;
         }
-        Request::initialize(Application::getInstance()->getTelegramBot());
-        Request::sendMessage($params);
+	    \EduTatarRuBot\Request::initialize(Application::getInstance()->getTelegramBot());
+	    \EduTatarRuBot\Request::sendMessage($params);
 
         if ($this->isLoaded()) {
             $this->setValue('REAL_SENT_TIME', date('Y-m-d H:i:s'));

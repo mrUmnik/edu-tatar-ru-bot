@@ -36,7 +36,7 @@ class Mark extends Model
 				if (mb_strtolower($mark) == 'н') {
 					$text .= '🍻 ' . $client->getValue('NAME') . ' ' .
 						($client->getValue('GENDER') == 'F' ? 'прогуляла' : 'прогулял') .
-						" предмет *" . $lesson . "*" . ($isToday ? "" : $date->format('d.m.Y')) . "\r\n";
+						" предмет *" . $lesson . "*" . ($isToday ? "" : " " . $date->format('d.m.Y')) . "\r\n";
 				} else {
 					$icons = array(
 						'1' => '🍄',

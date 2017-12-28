@@ -3,13 +3,15 @@ namespace EduTatarRuBot;
 
 
 use EduTatarRuBot\Tasks\Task;
+use Longman\TelegramBot\TelegramLog;
 
 class Application
 {
-	protected static $instance;
 	protected $db;
 	protected $config;
 	protected $telegramBot;
+
+	protected static $instance;
 
 	protected function __construct(Config $config)
 	{
@@ -30,19 +32,15 @@ class Application
 		$this->telegramBot->enableLimiter();
 		$this->telegramBot->enableBotan($this->getConfig('bot:botan_token'));
 		$this->telegramBot->enableAdmin($this->getConfig('bot:admin_id'));
+		TelegramLog::initErrorLog(ROOT_DIR . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . date('Y-m-d') . '_error.log');
+		TelegramLog::initDebugLog(ROOT_DIR . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . date('Y-m-d') . '_debug.log');
+		TelegramLog::initUpdateLog(ROOT_DIR . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . date('Y-m-d') . '_update.log');
+
 	}
 
 	public function getConfig($param)
 	{
 		return $this->config->get($param);
-	}
-
-    public static function getInstance()
-    {
-         if (null==self::$instance) {
-             self::$instance = new self(new Config());
-         }
-         return self::$instance;
 	}
 
     public function getTelegramBot()
@@ -58,5 +56,13 @@ class Application
 	public function run(Task $task)
 	{
 		$task->run();
+	}
+
+	public static function getInstance()
+	{
+		if (null == self::$instance) {
+			self::$instance = new self(new Config());
+		}
+		return self::$instance;
 	}
 }

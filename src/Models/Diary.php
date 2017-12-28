@@ -37,11 +37,18 @@ class Diary extends Model
 			throw new EduTatarRuBotException('Diary content is not a valid xml');
 		}
 		$day = $date->format('j');
-		$month = \EduTatarRuBot\Helpers\Date::getRussianMonthName($date->format('n'));
+		$prevMonthDate = clone $date;
+		$prevMonthDate = $prevMonthDate->modify('-1 month');
+		$prevMonth = \EduTatarRuBot\Helpers\Date::getRussianMonthName($prevMonthDate->format('n'));
 		foreach ($diaryXml->page as $monthXml) {
-			if ($monthXml['month'] == $month) {
+			$month = \EduTatarRuBot\Helpers\Date::getRussianMonthName($date->format('n'));
+			if ($monthXml['month'] == $month || $monthXml['month'] == $prevMonth) {
+				$prevDay = 0;
 				foreach ($monthXml as $dayXml) {
-					if ($dayXml['date'] == $day) {
+					if (intval($dayXml['date']) < intval($prevDay)) { // для переходов дат между месяцами месяц остается старым
+						$month = $prevMonth;
+					}
+					if ($monthXml['month'] == $month && $dayXml['date'] == $day) {
 						$index = 0;
 
 						foreach ($dayXml->classes->class as $class) {
@@ -55,13 +62,14 @@ class Diary extends Model
 							}
 							$index++;
 						}
+						break(2);
 					}
+					$prevDay = $dayXml['date'];
 				}
 			}
 		}
 		return $result;
 	}
-
 
 	public function getMarks()
 	{
@@ -79,7 +87,7 @@ class Diary extends Model
 				foreach ($dayXml->classes->class as $class) {
 					$class = trim((string)$class);
 					$mark = $dayXml->marks->marks[$index];
-					if (mb_strlen($class) && mb_strlen($mark)) {
+					if (mb_strlen($class) && mb_strlen($mark) && ($mark != 'н')) {
 						$result[$class][] = $mark;
 					}
 					$index++;

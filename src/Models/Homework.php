@@ -26,6 +26,7 @@ class Homework extends Model
             foreach ($newHomework as $lesson => $homework) {
                 $text .= ++$index . '. _' . $lesson . '_: ' . $homework . "\r\n";
             }
+	        $messageType = 'HOMEWORK';
         } else {
             $oldHomework = [];
             foreach ($oldHomeworkData as $item) {
@@ -38,6 +39,7 @@ class Homework extends Model
                     $text .= (mb_strlen($oldHomework[$lesson]) ? "(было: " . $oldHomework[$lesson] . ")" : "") . "\r\n";
                 }
             }
+	        $messageType = 'CHANGED_HOMEWORK';
         }
         foreach ($oldHomeworkData as $item) {
             if ($newHomework[$item['LESSON']] != $item['HOMEWORK']) { // homework was changed
@@ -55,7 +57,7 @@ class Homework extends Model
             ));
         }
         if (mb_strlen($text)) {
-            $client->sendMessage($text, 'HOMEWORK');
+	        $client->sendMessage($text, $messageType);
         }
     }
 

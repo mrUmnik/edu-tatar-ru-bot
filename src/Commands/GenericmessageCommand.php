@@ -89,11 +89,19 @@ class GenericmessageCommand extends SystemCommand
 			}
 		}
 
-
 		$client = new Client();
-		$client->addClientProcess($chat_id, $text);
+		if ($client->addClientProcess($chat_id, $text)) {
+			return Request::emptyResponse();
+		}
 
-		return Request::emptyResponse();
+		$text = 'Не волнуйтесь, всё идёт по плану. Мы уже следим за всем чем нужно.';
+
+		$data = [
+			'chat_id' => $chat_id,
+			'text' => $text,
+			'parse_mode' => 'markdown',
+		];
+		return \EduTatarRuBot\Request::sendMessage($data);
 
 	}
 }
